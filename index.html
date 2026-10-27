@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown to LinkedIn Post Formatter</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #f3f2ef; margin: 0; padding: 20px; color: #000000e6; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 10px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        h1 { color: #0a66c2; font-size: 24px; margin-bottom: 5px; }
+        p.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+        .editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        textarea { width: 100%; height: 300px; padding: 12px; border: 1fr solid #ccc; border-radius: 6px; font-family: monospace; box-sizing: border-box; resize: vertical; }
+        .preview-box { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; min-height: 300px; max-height: 400px; overflow-y: auto; text-align: left; white-space: pre-wrap; word-wrap: break-word; }
+        .actions { margin-top: 15px; display: flex; gap: 10px; align-items: center; }
+        button { background: #0a66c2; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #004182; }
+        .monetization-bar { margin-top: 30px; padding: 15px; background: #f8f9fa; border-left: 4px solid #0a66c2; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .monetization-bar a.btn-pay { background: #0070ba; color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .monetization-bar a.btn-sponsor { background: #f59e0b; color: white; text-decoration: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Formateador de Markdown para LinkedIn</h1>
+        <p class="subtitle">Transforma rápidamente tus notas en Markdown a formato estilizado listo para copiar y publicar en LinkedIn.</p>
+        
+        <div class="editor-grid">
+            <div>
+                <h3>1. Pega tu Markdown aquí:</h3>
+                <textarea id="markdownInput" placeholder="# Titulo Principal&#10;&#10;**Texto en negrita** para destacar.&#10;&#10;* Elemento 1&#10;* Elemento 2&#10;&#10;> Una cita inspiradora..."></textarea>
+            </div>
+            <div>
+                <h3>2. Vista previa estilizada:</h3>
+                <div id="postPreview" class="preview-box">Tu publicación aparecerá aquí...</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button onclick="convertAndCopy()">📋 Convertir y Copiar al Portapapeles</button>
+            <span id="statusMsg" style="color: #057642; font-weight: bold;"></span>
+        </div>
+
+        <div class="monetization-bar">
+            <div>
+                <strong>💡 ¿Te sirvió esta herramienta?</strong>
+                <p style="margin: 3px 0 0 0; font-size: 12px; color: #555;">Apoya el mantenimiento del micro-SaaS con $1 USD o explora minería en la nube.</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <a href="https://paypal.me/LucianoBenechCenoz" target="_blank" class="btn-pay">☕ Donar $1 USD (PayPal)</a>
+                <a href="https://gomining.com/?ref=tCW6U" target="_blank" class="btn-sponsor">⛏️ Descubrir GoMining (Bonus)</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const boldMap = {'a':'𝗮','b':'𝗯','c':'𝗰','d':'𝗱','e':'𝗲','f':'𝗳','g':'𝗴','h':'𝗵','i':'𝗶','j':'𝗷','k':'𝗸','l':'𝗹','m':'𝗺','n':'𝗻','o':'𝗼','p':'𝗽','q':' drain','r':'𝗿','s':'𝘀','t':'𝘁','u':'𝘂','v':'𝘃','w':'𝘄','x':'𝘅','y':'𝘆','z':'𝘇','A':'𝗔','B':'𝗕','C':'𝗖','D':'𝗗','E':'𝗘','F':'𝗙','G':'𝗚','H':'𝗛','I':'𝗜','J':'𝗝','K':'𝗞','L':'𝗟','M':'𝗠','N':'𝗡','O':'𝗢','P':'𝗣','Q':'𝗤','R':'𝗥','S':'𝗦','T':'𝗧','U':'𝗨','V':'𝗩','W':'𝗪','X':'𝗫','Y':'𝗬','Z':'𝗭','0':'𝟬','1':'𝟭','2':'𝟮','3':'𝟯','4':'𝟰','5':'𝟱','6':'𝟲','7':'𝟳','8':'𝟴','9':'𝟵'};
+        
+        function toBoldUnicode(str) {
+            return str.split('').map(c => boldMap[c] || c).join('');
+        }
+
+        function formatMarkdown(text) {
+            let res = text;
+            res = res.replace(/\*\*(.*?)\*\*/g, (match, p1) => toBoldUnicode(p1));
+            res = res.replace(/^# (.*$)/gim, '📌 $1\n');
+            res = res.replace(/^## (.*$)/gim, '🔹 $1\n');
+            res = res.replace(/^### (.*$)/gim, '▪️ $1\n');
+            res = res.replace(/^\* (.*$)/gim, '• $1');
+            res = res.replace(/^- (.*$)/gim, '• $1');
+            res = res.replace(/^> (.*$)/gim, '💡 "$1"');
+            return res;
+        }
+
+        document.getElementById('markdownInput').addEventListener('input', function() {
+            const formatted = formatMarkdown(this.value);
+            document.getElementById('postPreview').innerText = formatted || 'Tu publicación aparecerá aquí...';
+        });
+
+        function convertAndCopy() {
+            const input = document.getElementById('markdownInput').value;
+            const formatted = formatMarkdown(input);
+            navigator.clipboard.writeText(formatted).then(() => {
+                const msg = document.getElementById('statusMsg');
+                msg.innerText = '¡Copiado al portapapeles!';
+                setTimeout(() => { msg.innerText = ''; }, 3000);
+            });
+        }
+    </script>
+</body>
+</html>
