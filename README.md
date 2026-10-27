@@ -1,12 +1,7 @@
 # LinkedIn Markdown Formatter
 
-Micro-SaaS gratuito para transformar textos formateados en Markdown a Unicode para publicaciones de LinkedIn.
+Herramienta ligera sin dependencias para formatear publicaciones de LinkedIn utilizando caracteres Unicode legibles.
 
-## Características:
-- Conversión instantánea de negritas en caracteres Unicode compatibles con LinkedIn.
-- Encabezados con emojis visuales automáticos.
-- Listas de viñetas limpia y citas formateadas.
-- Copiado con 1 solo clic.
-
-## Monetización:
-Integrado con pasarela de apoyo PayPal y funnel de referidos GoMining.
+## Monetización y Soporte
+- Donaciones directas: [PayPal](https://paypal.me/LucianoBenechCenoz)
+- Wallet USDT TRC20: `TYndYVBb42q6U79tCm3VQzzhv2FtwAndhc`
